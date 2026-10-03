@@ -1,0 +1,42 @@
+# ==============================================================================
+# Production Netlify Configuration: Sports Committee 2026-27 Digital Pass
+# Identity: Prince Rabari (Deputy Logistics Head)
+# ==============================================================================
+
+[build]
+  publish = "."
+
+# Production HTTP Security & Privacy Headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+
+# Cache-Control Strategy for Static Assets
+[[headers]]
+  for = "/profile.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, immutable"
+
+[[headers]]
+  for = "/manifest.json"
+  [headers.values]
+    Content-Type = "application/manifest+json; charset=utf-8"
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Content-Type = "application/javascript; charset=utf-8"
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+# Single-Page Application (SPA) Fallback Route
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

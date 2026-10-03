@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#070b14" />
+  <meta name="author" content="Prince Rabari" />
+  <meta name="description" content="Official Digital Identity Card - Sports Committee 2026-27, Nirma University" />
+  
+  <title>Prince Rabari | Sports Committee 2026–27</title>
+
+  <!-- Typography: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       1. DESIGN TOKENS & SYSTEM VARIABLES
+       ========================================================================== */
+    :root {
+      --bg-dark: #070b14;
+      --surface-glass: rgba(17, 24, 39, 0.78);
+      --surface-elevated: rgba(30, 41, 59, 0.70);
+      --border-subtle: rgba(255, 255, 255, 0.12);
+      --border-bright: rgba(255, 255, 255, 0.25);
+      
+      /* Athletic Sports Brand Palette */
+      --primary-orange: #f97316;
+      --primary-orange-glow: rgba(249, 115, 22, 0.35);
+      --primary-orange-dark: #ea580c;
+      --accent-cyan: #38bdf8;
+      --accent-green: #22c55e;
+      
+      /* Typography */
+      --text-pure: #ffffff;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
+      
+      /* Glass Controls */
+      --btn-glass: rgba(255, 255, 255, 0.07);
+      --btn-glass-hover: rgba(255, 255, 255, 0.15);
+      
+      /* Radii & Motion */
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 26px;
+      --radius-full: 9999px;
+      --speed-fast: 0.18s ease;
+      --speed-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ==========================================================================
+       2. RESET & BASE DOCUMENT STYLES
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.18) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.14) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.95) 0px, transparent 100%);
+      background-attachment: fixed;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-pure);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 16px;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Dynamic Spheres */
+    .glow-sphere {
+      position: fixed;
+      width: 320px;
+      height: 320px;
+      border-radius: var(--radius-full);
+      filter: blur(95px);
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.45;
+    }
+    .glow-top-left { 
+      top: 2%; 
+      left: 2%; 
+      background: var(--primary-orange); 
+    }
+    .glow-bottom-right { 
+      bottom: 2%; 
+      right: 2%; 
+      background: #0284c7; 
+    }
+
+    /* ==========================================================================
+       3. 3D CARD CONTAINER & SCENE
+       ========================================================================== */
+    .card-scene {
+      perspective: 1200px;
+      width: 100%;
+      max-width: 420px;
+      z-index: 1;
+    }
+
+    .smart-id-card {
+      background: var(--surface-glass);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 28px 22px 24px 22px;
+      box-shadow: 
+        0 25px 60px -15px rgba(0, 0, 0, 0.75),
+        0 0 35px var(--primary-orange-glow);
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--speed-smooth), box-shadow var(--speed-smooth);
+    }
+
+    /* Top Accent Stripe Animation */
+    .smart-id-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-orange), var(--accent-cyan), var(--primary-orange));
+      background-size: 200% 100%;
+      animation: stripeShift 6s linear infinite;
+    }
+
+    @keyframes stripeShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ==========================================================================
+       4. TOPBAR: BADGE & CONTROLS
+       ========================================================================== */
+    .card-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(249, 115, 22, 0.16);
+      border: 1px solid rgba(249, 115, 22, 0.4);
+      color: #ffedd5;
+      padding: 5px 14px;
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Outfit', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .pulse-indicator {
+      width: 7px;
+      height: 7px;
+      border-radius: var(--radius-full);
+      background-color: var(--primary-orange);
+      box-shadow: 0 0 8px var(--primary-orange);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.45); opacity: 0.35; }
+    }
+
+    .action-icon-btn {
+      background: var(--btn-glass);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-pure);
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 15px;
+      transition: background var(--speed-fast), transform var(--speed-fast);
+    }
+    .action-icon-btn:hover {
+      background: var(--btn-glass-hover);
+      transform: scale(1.08);
+    }
+
+    /* ==========================================================================
+       5. PROFILE HERO & AVATAR
+       ========================================================================== */
+    .profile-hero {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 116px;
+      height: 116px;
+      margin: 0 auto 16px auto;
+    }
+
+    .avatar-glow-ring {
+      position: absolute;
+      inset: -4px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--primary-orange), transparent 55%, var(--accent-cyan));
+      animation: rotateGlow 9s linear infinite;
+    }
+
+    @keyframes rotateGlow {
+      to { transform: rotate(360deg); }
+    }
+
+    .avatar-photo {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: var(--radius-full);
+      object-fit: cover;
+      background: #1e293b;
+      border: 3.5px solid #070b14;
+    }
+
+    .user-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      color: var(--text-pure);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .verified-mark {
+      color: var(--accent-cyan);
+      font-size: 19px;
+    }
+
+    .user-designation {
+      color: var(--primary-orange);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-top: 4px;
+    }
+
+    .user-meta {
+      color: var(--text-muted);
+      font-size: 12px;
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    /* ==========================================================================
+       6. INTERACTIVE TAB NAVIGATION
+       ========================================================================== */
+    .tab-navigation {
+      display: flex;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 4px;
+      gap: 4px;
+      margin-bottom: 20px;
+    }
+
+    .nav-tab {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 9px 6px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--speed-fast);
+    }
+
+    .nav-tab.active {
+      background: var(--primary-orange);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4);
+    }
+
+    /* ==========================================================================
+       7. TAB PANELS & LIST VIEWS
+       ========================================================================== */
+    .tab-panel { 
+      display: none; 
+    }
+    .tab-panel.active { 
+      display: block; 
+      animation: slideUpFade 0.25s ease; 
+    }
+
+    @keyframes slideUpFade {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tab 1: Links */
+    .action-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .action-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--btn-glass);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-pure);
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      transition: all var(--speed-fast);
+      cursor: pointer;
+    }
+
+    .action-row:hover {
+      background: var(--btn-glass-hover);
+      transform: translateY(-2px);
+      border-color: var(--border-bright);
+    }
+
+    .row-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+    }
+
+    .icon-green { background: rgba(34, 197, 94, 0.18); color: #4ade80; }
+    .icon-wa { background: rgba(37, 211, 102, 0.22); color: #25d366; }
+    .icon-insta { background: rgba(225, 48, 108, 0.2); color: #f43f5e; }
+    .icon-in { background: rgba(10, 102, 194, 0.2); color: #38bdf8; }
+    .icon-orange { background: rgba(249, 115, 22, 0.2); color: #fb923c; }
+
+    .arrow-icon {
+      color: var(--text-subtle);
+      font-size: 14px;
+      transition: transform var(--speed-fast), color var(--speed-fast);
+    }
+    .action-row:hover .arrow-icon {
+      transform: translateX(3px);
+      color: var(--text-pure);
+    }
+
+    /* Tab 2: Duties */
+    .info-box {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 15px;
+      margin-bottom: 11px;
+      text-align: left;
+    }
+
+    .box-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--primary-orange);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .box-body {
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 12px;
+      color: #cbd5e1;
+      margin-bottom: 7px;
+    }
+    .check-mark { 
+      color: var(--primary-orange); 
+      font-size: 13px; 
+      margin-top: 1px; 
+    }
+
+    /* Tab 3: Timeline */
+    .timeline-node {
+      display: flex;
+      gap: 12px;
+      border-left: 2px solid rgba(249, 115, 22, 0.35);
+      padding-left: 14px;
+      margin-left: 8px;
+      margin-bottom: 14px;
+      text-align: left;
+      position: relative;
+    }
+    .timeline-node::before {
+      content: '';
+      position: absolute;
+      left: -19px;
+      top: 2px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary-orange);
+    }
+    .node-tag { 
+      font-size: 11px; 
+      color: var(--primary-orange); 
+      font-weight: 700; 
+    }
+    .node-text { 
+      font-size: 12px; 
+      color: #f1f5f9; 
+      font-weight: 500; 
+    }
+
+    /* ==========================================================================
+       8. BUTTONS & TOAST
+       ========================================================================== */
+    .primary-save-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+      border: none;
+      color: #ffffff;
+      padding: 13px 18px;
+      border-radius: var(--radius-md);
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(249, 115, 22, 0.35);
+      margin-top: 18px;
+      transition: all var(--speed-fast);
+    }
+
+    .primary-save-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(249, 115, 22, 0.5);
+    }
+
+    .card-bottom-footer {
+      margin-top: 18px;
+      font-size: 11px;
+      color: var(--text-subtle);
+      text-align: center;
+    }
+
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      background: #1e293b;
+      border: 1px solid var(--primary-orange);
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      z-index: 100;
+    }
+    .toast-box.show { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Ambient Glow -->
+  <div class="glow-sphere glow-top-left"></div>
+  <div class="glow-sphere glow-bottom-right"></div>
+
+  <div class="card-scene">
+    <main class="smart-id-card" id="cardElement">
+      
+      <!-- Top Bar -->
+      <header class="card-topbar">
+        <div class="badge-pill">
+          <span class="pulse-indicator"></span>
+          SPORTS COMMITTEE 2026–27
+        </div>
+        <button class="action-icon-btn" onclick="shareProfile()" title="Share Profile">
+          🔗
+        </button>
+      </header>
+
+      <!-- Center Member Hero -->
+      <section class="profile-hero">
+        <div class="avatar-wrapper">
+          <div class="avatar-glow-ring"></div>
+          <img 
+            class="avatar-photo" 
+            src="profile.jpg" 
+            alt="Prince Rabari" 
+            onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80'"
+          />
+        </div>
+        <h1 class="user-name">
+          Prince Rabari
+          <span class="verified-mark" title="Verified Member">✓</span>
+        </h1>
+        <p class="user-designation">Deputy Logistics Head</p>
+        <p class="user-meta">
+          <span>🏛 Nirma University</span>
+          <span>•</span>
+          <span>ID: 24BPH072</span>
+        </p>
+      </section>
+
+      <!-- Tabs Navigation -->
+      <nav class="tab-navigation">
+        <button class="nav-tab active" onclick="activateTab(0)">CONNECT</button>
+        <button class="nav-tab" onclick="activateTab(1)">DUTIES</button>
+        <button class="nav-tab" onclick="activateTab(2)">INFO</button>
+      </nav>
+
+      <!-- TAB 1: Quick Action Links -->
+      <div class="tab-panel active" id="panel-0">
+        <div class="action-links">
+          
+          <!-- Direct Phone Call -->
+          <a href="tel:+917984127426" class="action-row">
+            <div class="row-left">
+              <span class="badge-icon icon-green">📞</span>
+              <span>Call: +91 79841 27426</span>
+            </div>
+            <span class="arrow-icon">→</span>
+          </a>
+
+          <!-- WhatsApp Chat -->
+          <a href="https://wa.me/917984127426?text=Hi%20Prince,%20connecting%20regarding%20Sports%20Committee%202026-27" target="_blank" rel="noopener noreferrer" class="action-row">
+            <div class="row-left">
+              <span class="badge-icon icon-wa">💬</span>
+              <span>Chat on WhatsApp</span>
+            </div>
+            <span class="arrow-icon">→</span>
+          </a>
+
+          <!-- Instagram Profile -->
+          <a href="https://www.instagram.com/prince_rabari__06" target="_blank" rel="noopener noreferrer" class="action-row">
+            <div class="row-left">
+              <span class="badge-icon icon-insta">📸</span>
+              <span>Instagram Profile</span>
+            </div>
+            <span class="arrow-icon">→</span>
+          </a>
+
+          <!-- LinkedIn Profile -->
+          <a href="https://www.linkedin.com/in/prince-rabari-26891233b" target="_blank" rel="noopener noreferrer" class="action-row">
+            <div class="row-left">
+              <span class="badge-icon icon-in">💼</span>
+              <span>LinkedIn Network</span>
+            </div>
+            <span class="arrow-icon">→</span>
+          </a>
+
+          <!-- University Email -->
+          <a href="mailto:24bph072@nirmauni.ac.in" class="action-row" onclick="copyValue('24bph072@nirmauni.ac.in', event)">
+            <div class="row-left">
+              <span class="badge-icon icon-orange">🎓</span>
+              <span>24bph072@nirmauni.ac.in</span>
+            </div>
+            <span class="arrow-icon">📋</span>
+          </a>
+
+          <!-- Personal Email -->
+          <a href="mailto:princerabari20066@gmail.com" class="action-row">
+            <div class="row-left">
+              <span class="badge-icon icon-orange">✉️</span>
+              <span>Personal Email</span>
+            </div>
+            <span class="arrow-icon">→</span>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- TAB 2: Logistics Responsibilities -->
+      <div class="tab-panel" id="panel-1">
+        <div class="info-box">
+          <div class="box-title">Core Mandate</div>
+          <div class="box-body">
+            Directing sports equipment logistics, tournament field setups, equipment maintenance, and referee coordination for university athletics.
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="box-title">Key Responsibilities</div>
+          <div class="checklist-item">
+            <span class="check-mark">✔</span>
+            <span>Sports equipment inventory, procurement & safety audit.</span>
+          </div>
+          <div class="checklist-item">
+            <span class="check-mark">✔</span>
+            <span>Ground setup coordination with University Sports Complex.</span>
+          </div>
+          <div class="checklist-item">
+            <span class="check-mark">✔</span>
+            <span>Referee transportation and equipment kit delivery.</span>
+          </div>
+          <div class="checklist-item">
+            <span class="check-mark">✔</span>
+            <span>First-aid readiness and hydration station management.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: Academic & Committee Information -->
+      <div class="tab-panel" id="panel-2">
+        <div class="info-box">
+          <div class="box-title">Affiliation Details</div>
+          <p class="box-body">
+            <strong>Institution:</strong> Institute of Pharmacy, Nirma University<br />
+            <strong>Campus:</strong> SG Highway, Ahmedabad, Gujarat<br />
+            <strong>Term:</strong> Academic Session 2026–2027
+          </p>
+        </div>
+
+        <div class="info-box">
+          <div class="box-title">Upcoming Sports Milestones</div>
+          <div class="timeline-node">
+            <div>
+              <div class="node-tag">Nov 2026</div>
+              <div class="node-text">Inter-Department Cricket & Football Cup</div>
+            </div>
+          </div>
+          <div class="timeline-node">
+            <div>
+              <div class="node-tag">Jan 2027</div>
+              <div class="node-text">Annual University Athletics Meet</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Save Contact (.vcf) Button -->
+      <button class="primary-save-btn" onclick="generateAndSaveVCard()">
+        <span>💾</span> Save Contact to Phone (.vcf)
+      </button>
+
+      <!-- Bottom Verification Footer -->
+      <footer class="card-bottom-footer">
+        Verified Digital Pass • Sports Committee 2026–27
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- Floating Toast Notification -->
+  <div class="toast-box" id="toastBox">Copied to clipboard!</div>
+
+  <!-- ==========================================================================
+       9. VANILLA JAVASCRIPT & REUSABLE CONFIGURATION
+       ========================================================================== -->
+  <script>
+    /* ==========================================================================
+       CONFIG DATA: Edit this object to change details for another person
+       ========================================================================== */
+    const PERSON_CONFIG = {
+      fullName: "Prince Rabari",
+      orgName: "Nirma University;Sports Committee 2026-27",
+      roleTitle: "Deputy Logistics Head",
+      phone: "+917984127426",
+      officialEmail: "24bph072@nirmauni.ac.in",
+      personalEmail: "princerabari20066@gmail.com",
+      linkedinUrl: "https://www.linkedin.com/in/prince-rabari-26891233b",
+      notes: "University ID: 24BPH072 - Sports Committee 2026-27"
+    };
+
+    // Tab Activation Function
+    function activateTab(index) {
+      const tabs = document.querySelectorAll('.nav-tab');
+      const panels = document.querySelectorAll('.tab-panel');
+
+      tabs.forEach((tab, i) => tab.classList.toggle('active', i === index));
+      panels.forEach((panel, i) => panel.classList.toggle('active', i === index));
+    }
+
+    // Dynamic vCard (.vcf) Generator
+    function generateAndSaveVCard() {
+      const vcardContent = [
+        'BEGIN:VCARD',
+        'VERSION:3.0',
+        'N:;' + PERSON_CONFIG.fullName + ';;;',
+        'FN:' + PERSON_CONFIG.fullName,
+        'ORG:' + PERSON_CONFIG.orgName,
+        'TITLE:' + PERSON_CONFIG.roleTitle,
+        'TEL;TYPE=CELL,VOICE:' + PERSON_CONFIG.phone,
+        'EMAIL;TYPE=WORK:' + PERSON_CONFIG.officialEmail,
+        'EMAIL;TYPE=HOME:' + PERSON_CONFIG.personalEmail,
+        'URL:' + PERSON_CONFIG.linkedinUrl,
+        'NOTE:' + PERSON_CONFIG.notes,
+        'END:VCARD'
+      ].join('\r\n');
+
+      const blob = new Blob([vcardContent], { type: 'text/vcard;charset=utf-8;' });
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.href = URL.createObjectURL(blob);
+      downloadAnchor.setAttribute('download', `${PERSON_CONFIG.fullName.replace(/\s+/g, '_')}_ID.vcf`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      document.body.removeChild(downloadAnchor);
+
+      notifyToast('Contact file downloaded!');
+    }
+
+    // Copy to Clipboard Utility
+    function copyValue(str, event) {
+      if (event) event.preventDefault();
+      navigator.clipboard.writeText(str).then(() => {
+        notifyToast('Copied: ' + str);
+      }).catch(() => {
+        notifyToast('Selected: ' + str);
+      });
+    }
+
+    // Toast Manager
+    function notifyToast(msg) {
+      const toast = document.getElementById('toastBox');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2600);
+    }
+
+    // Native Mobile Share Utility
+    function shareProfile() {
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          text: `Digital Identity Pass of ${PERSON_CONFIG.fullName} - ${PERSON_CONFIG.roleTitle}`,
+          url: window.location.href
+        }).catch(() => {});
+      } else {
+        copyValue(window.location.href);
+        notifyToast('Profile link copied!');
+      }
+    }
+
+    // Interactive 3D Card Hover on Desktop
+    const cardEl = document.getElementById('cardElement');
+    document.addEventListener('mousemove', (e) => {
+      if (window.innerWidth < 768) return;
+      const xRot = (window.innerWidth / 2 - e.pageX) / 25;
+      const yRot = (window.innerHeight / 2 - e.pageY) / 25;
+      cardEl.style.transform = `rotateY(${xRot}deg) rotateX(${yRot}deg)`;
+    });
+
+    document.addEventListener('mouseleave', () => {
+      cardEl.style.transform = 'rotateY(0deg) rotateX(0deg)';
+    });
+  </script>
+</body>
+</html>
